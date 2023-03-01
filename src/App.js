@@ -1,23 +1,145 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/database';
+import firebaseConfig from './Firebase/firebase.config';
+import SignIn from './pages/SignIn';
+
+
+
+firebase.initializeApp(firebaseConfig);
+
+const tasks = {
+  task1: {
+    name: "Drinking water",
+    completed: false
+  },
+  task2: {
+    name: "Drinking soda",
+    completed: false
+  },
+  task3: {
+    name: "Eating",
+    completed: false
+  },
+  task4: {
+    name: "Swimming",
+    completed: false
+  },
+  task5: {
+    name: "Walking",
+    completed: false
+  },
+  task6: {
+    name: "Reading",
+    completed: false
+  },
+  task7: {
+    name: "Writing",
+    completed: false
+  },
+  task8: {
+    name: "Cooking",
+    completed: false
+  },
+  task9: {
+    name: "Cleaning",
+    completed: false
+  },
+  task10: {
+    name: "Exercising",
+    completed: false
+  },
+  task11: {
+    name: "firebase",
+    completed: false
+  }
+};
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [taskState, setTaskState] = useState([]);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const uid = user.uid;
+      const dbRef = firebase.database().ref(`users/${uid}/tasks`);
+      dbRef.on('value', (snapshot) => {
+        const tasksFromDB = snapshot.val();
+        if (tasksFromDB) {
+          // Merge the tasks from the database with the default tasks
+          setTaskState((prevState) => {
+            const mergedTasks = { ...prevState, ...tasksFromDB };
+            return mergedTasks;
+          });
+        } else {
+          // Use the default tasks if there are no tasks in the database
+          setTaskState(tasks);
+          dbRef.set(tasks);
+        }
+      });
+    }
+  }, [user]);
+  
+
+
+  const handleSignOut = () => {
+    firebase.auth().signOut();
+  };
+
+  const handleTaskCompleted = (taskKey) => {
+    const uid = user.uid;
+    const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+    const updatedTask = {
+      ...taskState[taskKey],
+      completed: true
+    };
+    taskRef.set(updatedTask);
+    setTaskState({
+      ...taskState,
+      [taskKey]: updatedTask
+    });
+  };
+
+  const tasksCompleted = taskState ? Object.values(taskState).filter(task => task.completed).length : 0;
+  const tasksTotal = taskState ? Object.keys(taskState).length : 0;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {user ? (
+        <div>
+          <p>Welcome, {user.displayName}!<br/>
+          {user.email} </p>
+          <button onClick={handleSignOut}>Sign Out</button>
+          {taskState && Object.entries(taskState).map(([taskKey, task]) => (
+            <div key={taskKey}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => handleTaskCompleted(taskKey)}
+                />
+                {task.name}
+              </label>
+            </div>
+          ))}
+          <p>You have completed {tasksCompleted}/{tasksTotal} tasks!</p>
+        </div>
+        
+      ) : (
+        <SignIn />
+      )}
     </div>
   );
 }
