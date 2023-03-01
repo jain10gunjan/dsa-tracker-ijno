@@ -5,8 +5,6 @@ import 'firebase/compat/database';
 import firebaseConfig from './Firebase/firebase.config';
 import SignIn from './pages/SignIn';
 
-
-
 firebase.initializeApp(firebaseConfig);
 
 const tasks = {
@@ -64,7 +62,6 @@ function App() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        
       } else {
         setUser(null);
       }
@@ -91,8 +88,6 @@ function App() {
       });
     }
   }, [user]);
-  
-
 
   const handleSignOut = () => {
     firebase.auth().signOut();
@@ -112,6 +107,20 @@ function App() {
     });
   };
 
+  const handleTaskUnchecked = (taskKey) => {
+    const uid = user.uid;
+    const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+    const updatedTask = {
+      ...taskState[taskKey],
+      completed: false
+    };
+    taskRef.set(updatedTask);
+    setTaskState({
+      ...taskState,
+      [taskKey]: updatedTask
+    });
+  };
+
   const tasksCompleted = taskState ? Object.values(taskState).filter(task => task.completed).length : 0;
   const tasksTotal = taskState ? Object.keys(taskState).length : 0;
 
@@ -119,29 +128,37 @@ function App() {
     <div>
       {user ? (
         <div>
-          <p>Welcome, {user.displayName}!<br/>
-          {user.email} </p>
+          <header>
+          <h1>My Task List</h1>
+          </header>
           <button onClick={handleSignOut}>Sign Out</button>
-          {taskState && Object.entries(taskState).map(([taskKey, task]) => (
-            <div key={taskKey}>
+      <main>
+        <p>{tasksCompleted} out of {tasksTotal} tasks completed</p>
+        <ul>
+          {Object.entries(taskState).map(([taskKey, task]) => (
+            <li key={taskKey}>
               <label>
                 <input
                   type="checkbox"
                   checked={task.completed}
-                  onChange={() => handleTaskCompleted(taskKey)}
+                  onChange={() => task.completed ? handleTaskUnchecked(taskKey) : handleTaskCompleted(taskKey)}
                 />
                 {task.name}
               </label>
-            </div>
+            </li>
           ))}
-          <p>You have completed {tasksCompleted}/{tasksTotal} tasks!</p>
-        </div>
-        
-      ) : (
-        <SignIn />
-      )}
+        </ul>
+      </main>
     </div>
-  );
+  ) : (
+    <SignIn />
+  )}
+</div>
+);
 }
 
 export default App;
+
+
+
+
