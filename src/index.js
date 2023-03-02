@@ -13,7 +13,6 @@ ReactDOM.render(
       <Route path="/" element={<App />} />
       <Route path="/percentage" element={<Percentage />} />
       <Route path="/stats" element={<StatsPage />} />
-
       </Routes>
     </BrowserRouter>,
   document.getElementById('root')

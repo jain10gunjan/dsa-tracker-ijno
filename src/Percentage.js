@@ -6,6 +6,7 @@ import firebaseConfig from './Firebase/firebase.config';
 import SignIn from './pages/SignIn';
 
 
+
 firebase.initializeApp(firebaseConfig);
 
 const tasks = {
