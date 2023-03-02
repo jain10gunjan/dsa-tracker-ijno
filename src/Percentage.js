@@ -10,15 +10,15 @@ firebase.initializeApp(firebaseConfig);
 
 const tasks = {
   task1: {
-    name: "Drinking water",
+    name: "Drinking Percentage",
     completed: false
   },
   task2: {
-    name: "Drinking soda",
+    name: "Drinking soda Percentage",
     completed: false
   },
   task3: {
-    name: "Eating",
+    name: "Eating Percentage",
     completed: false
   },
   task4: {
@@ -30,7 +30,7 @@ const tasks = {
     completed: false
   },
   task6: {
-    name: "Reading",
+    name: "Reading Percentage",
     completed: false
   },
   task7: {
@@ -42,7 +42,7 @@ const tasks = {
     completed: false
   },
   task9: {
-    name: "Cleaning",
+    name: "Cleaning Percentage",
     completed: false
   },
   task10: {
@@ -55,9 +55,9 @@ const tasks = {
   }
 };
 
-function App() {
+function Percentage() {
   const [user, setUser] = useState(null);
-  const [taskState, setTaskState] = useState([]);
+  const [PercentagetaskState, setPercentageTaskState] = useState([]);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -72,18 +72,18 @@ function App() {
   useEffect(() => {
     if (user) {
       const uid = user.uid;
-      const dbRef = firebase.database().ref(`users/${uid}/tasks`);
+      const dbRef = firebase.database().ref(`users/${uid}/percentage`);
       dbRef.on('value', (snapshot) => {
         const tasksFromDB = snapshot.val();
         if (tasksFromDB) {
           // Merge the tasks from the database with the default tasks
-          setTaskState((prevState) => {
+          setPercentageTaskState((prevState) => {
             const mergedTasks = { ...prevState, ...tasksFromDB };
             return mergedTasks;
           });
         } else {
           // Use the default tasks if there are no tasks in the database
-          setTaskState(tasks);
+          setPercentageTaskState(tasks);
           dbRef.set(tasks);
         }
       });
@@ -96,34 +96,34 @@ function App() {
 
   const handleTaskCompleted = (taskKey) => {
     const uid = user.uid;
-    const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+    const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
     const updatedTask = {
-      ...taskState[taskKey],
+      ...PercentagetaskState[taskKey],
       completed: true
     };
     taskRef.set(updatedTask);
-    setTaskState({
-      ...taskState,
+    setPercentageTaskState({
+      ...PercentagetaskState,
       [taskKey]: updatedTask
     });
   };
 
   const handleTaskUnchecked = (taskKey) => {
     const uid = user.uid;
-    const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+    const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
     const updatedTask = {
-      ...taskState[taskKey],
+      ...PercentagetaskState[taskKey],
       completed: false
     };
     taskRef.set(updatedTask);
-    setTaskState({
-      ...taskState,
+    setPercentageTaskState({
+      ...PercentagetaskState,
       [taskKey]: updatedTask
     });
   };
 
-  const tasksCompleted = taskState ? Object.values(taskState).filter(task => task.completed).length : 0;
-  const tasksTotal = taskState ? Object.keys(taskState).length : 0;
+  const PercentagetasksCompleted = PercentagetaskState ? Object.values(PercentagetaskState).filter(task => task.completed).length : 0;
+  const PercentagetasksTotal = PercentagetaskState ? Object.keys(PercentagetaskState).length : 0;
 
   return (
     <div>
@@ -134,9 +134,9 @@ function App() {
           </header>
           <button onClick={handleSignOut}>Sign Out</button>
       <main>
-        <p>{tasksCompleted} out of {tasksTotal} tasks completed</p>
+        <p>{PercentagetasksCompleted} out of {PercentagetasksTotal} tasks completed</p>
         <ul>
-          {Object.entries(taskState).map(([taskKey, task]) => (
+          {Object.entries(PercentagetaskState).map(([taskKey, task]) => (
             <li key={taskKey}>
               <label>
                 <input
@@ -159,7 +159,7 @@ function App() {
 );
 }
 
-export default App;
+export default Percentage;
 
 
 
