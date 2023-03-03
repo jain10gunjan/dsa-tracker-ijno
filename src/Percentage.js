@@ -101,7 +101,7 @@ function Percentage() {
   const handleTaskCompleted = (taskKey) => {
     if (user) {
       const uid = user.uid;
-      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
       const updatedTask = {
         ...PercentagetaskState[taskKey],
         completed: true
@@ -128,7 +128,7 @@ function Percentage() {
   const handleTaskUnchecked = (taskKey) => {
     if (user) {
       const uid = user.uid;
-      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
       const updatedTask = {
         ...PercentagetaskState[taskKey],
         completed: false
