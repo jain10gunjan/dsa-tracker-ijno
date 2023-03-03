@@ -88,6 +88,9 @@ function Percentage() {
           dbRef.set(tasks);
         }
       });
+    }else {
+      // Use the default tasks if user is not signed in
+      setPercentageTaskState(tasks);
     }
   }, [user]);
 
@@ -96,31 +99,57 @@ function Percentage() {
   };
 
   const handleTaskCompleted = (taskKey) => {
-    const uid = user.uid;
-    const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
-    const updatedTask = {
-      ...PercentagetaskState[taskKey],
-      completed: true
-    };
-    taskRef.set(updatedTask);
-    setPercentageTaskState({
-      ...PercentagetaskState,
-      [taskKey]: updatedTask
-    });
+    if (user) {
+      const uid = user.uid;
+      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const updatedTask = {
+        ...PercentagetaskState[taskKey],
+        completed: true
+      };
+      taskRef.set(updatedTask);
+      setPercentageTaskState({
+        ...PercentagetaskState,
+        [taskKey]: updatedTask
+      });
+    } else {
+      const updatedTask = {
+        ...PercentagetaskState[taskKey],
+        completed: true
+      };
+      const updatedTaskState = {
+        ...PercentagetaskState,
+        [taskKey]: updatedTask
+      };
+      setPercentageTaskState(updatedTaskState);
+      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
+    }
   };
 
   const handleTaskUnchecked = (taskKey) => {
-    const uid = user.uid;
-    const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
-    const updatedTask = {
-      ...PercentagetaskState[taskKey],
-      completed: false
-    };
-    taskRef.set(updatedTask);
-    setPercentageTaskState({
-      ...PercentagetaskState,
-      [taskKey]: updatedTask
-    });
+    if (user) {
+      const uid = user.uid;
+      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const updatedTask = {
+        ...PercentagetaskState[taskKey],
+        completed: false
+      };
+      taskRef.set(updatedTask);
+      setPercentageTaskState({
+        ...PercentagetaskState,
+        [taskKey]: updatedTask
+      });
+    } else {
+      const updatedTask = {
+        ...PercentagetaskState[taskKey],
+        completed: false
+      };
+      const updatedTaskState = {
+        ...PercentagetaskState,
+        [taskKey]: updatedTask
+      };
+      setPercentageTaskState(updatedTaskState);
+      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
+    }
   };
 
   const PercentagetasksCompleted = PercentagetaskState ? Object.values(PercentagetaskState).filter(task => task.completed).length : 0;
@@ -154,7 +183,26 @@ function Percentage() {
       
     </div>
   ) : (
+    <div>
     <SignIn />
+    <main>
+        <p>{PercentagetasksCompleted} out of {PercentagetasksTotal} tasks completed</p>
+        <ul>
+          {Object.entries(PercentagetaskState).map(([taskKey, task]) => (
+            <li key={taskKey}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => task.completed ? handleTaskUnchecked(taskKey) : handleTaskCompleted(taskKey)}
+                />
+                {task.name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </main>
+    </div>
   )}
 </div>
 );

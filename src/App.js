@@ -6,6 +6,7 @@ import firebaseConfig from './Firebase/firebase.config';
 import SignIn from './pages/SignIn';
 
 
+
 firebase.initializeApp(firebaseConfig);
 
 const tasks = {
@@ -55,6 +56,7 @@ const tasks = {
   }
 };
 
+
 function App() {
   const [user, setUser] = useState(null);
   const [taskState, setTaskState] = useState([]);
@@ -87,6 +89,9 @@ function App() {
           dbRef.set(tasks);
         }
       });
+    }else {
+      // Use the default tasks if user is not signed in
+      setTaskState(tasks);
     }
   }, [user]);
 
@@ -94,7 +99,7 @@ function App() {
     firebase.auth().signOut();
   };
 
-  const handleTaskCompleted = (taskKey) => {
+  /*const handleTaskCompleted = (taskKey) => {
     const uid = user.uid;
     const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
     const updatedTask = {
@@ -106,8 +111,36 @@ function App() {
       ...taskState,
       [taskKey]: updatedTask
     });
+  };*/
+
+  const handleTaskCompleted = (taskKey) => {
+    if (user) {
+      const uid = user.uid;
+      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const updatedTask = {
+        ...taskState[taskKey],
+        completed: true
+      };
+      taskRef.set(updatedTask);
+      setTaskState({
+        ...taskState,
+        [taskKey]: updatedTask
+      });
+    } else {
+      const updatedTask = {
+        ...taskState[taskKey],
+        completed: true
+      };
+      const updatedTaskState = {
+        ...taskState,
+        [taskKey]: updatedTask
+      };
+      setTaskState(updatedTaskState);
+      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
+    }
   };
 
+  /*
   const handleTaskUnchecked = (taskKey) => {
     const uid = user.uid;
     const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
@@ -121,19 +154,47 @@ function App() {
       [taskKey]: updatedTask
     });
   };
+  */
+
+  const handleTaskUnchecked = (taskKey) => {
+    if (user) {
+      const uid = user.uid;
+      const taskRef = firebase.database().ref(`users/${uid}/tasks/${taskKey}`);
+      const updatedTask = {
+        ...taskState[taskKey],
+        completed: false
+      };
+      taskRef.set(updatedTask);
+      setTaskState({
+        ...taskState,
+        [taskKey]: updatedTask
+      });
+    } else {
+      const updatedTask = {
+        ...taskState[taskKey],
+        completed: false
+      };
+      const updatedTaskState = {
+        ...taskState,
+        [taskKey]: updatedTask
+      };
+      setTaskState(updatedTaskState);
+      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
+    }
+  };
 
   const tasksCompleted = taskState ? Object.values(taskState).filter(task => task.completed).length : 0;
   const tasksTotal = taskState ? Object.keys(taskState).length : 0;
 
   return (
-    <div>
+    <div>      
       {user ? (
         <div>
           <header>
           <h1>My Task List</h1>
           </header>
           <button onClick={handleSignOut}>Sign Out</button>
-      <main>
+          <main>
         <p>{tasksCompleted} out of {tasksTotal} tasks completed</p>
         <ul>
           {Object.entries(taskState).map(([taskKey, task]) => (
@@ -150,11 +211,35 @@ function App() {
           ))}
         </ul>
       </main>
-      
     </div>
   ) : (
+    <div>
     <SignIn />
+    <main>
+        <p>{tasksCompleted} out of {tasksTotal} tasks completed</p>
+        <ul>
+          {Object.entries(taskState).map(([taskKey, task]) => (
+            <li key={taskKey}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => task.completed ? handleTaskUnchecked(taskKey) : handleTaskCompleted(taskKey)}
+                />
+                {task.name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </main>
+        </div>
+        
   )}
+
+
+  
+
+  
 </div>
 );
 }
