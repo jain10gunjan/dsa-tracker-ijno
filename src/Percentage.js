@@ -1,64 +1,84 @@
-import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/database';
-import firebaseConfig from './Firebase/firebase.config';
-import SignIn from './pages/SignIn';
-
-
+import React, { useState, useEffect } from "react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore"; // Import Firestore
+import firebaseConfig from "./Firebase/firebase.config";
+import SignIn from "./pages/SignIn";
+import toast, { Toaster } from "react-hot-toast";
+import Localbase from "localbase";
 
 firebase.initializeApp(firebaseConfig);
 
 const tasks = {
   task1: {
-    name: "Drinking Percentage",
-    completed: false
+    name: "This is the question 1",
+    topic: "arrays",
+    completed: false,
   },
   task2: {
     name: "Drinking soda Percentage",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task3: {
     name: "Eating Percentage",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task4: {
     name: "Swimming",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task5: {
     name: "Walking",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task6: {
     name: "Reading Percentage",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task7: {
     name: "Writing",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task8: {
     name: "Cooking",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task9: {
     name: "Cleaning Percentage",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task10: {
     name: "Exercising",
-    completed: false
+    topic: "arrays",
+    completed: false,
   },
   task11: {
     name: "firebase",
-    completed: false
-  }
+    topic: "arrays",
+    completed: false,
+  },
+  task12: {
+    name:
+      "A vernier calliper has 1 mm mark on the main scale. It has 20 equal divisions on the vernier scalewhich match with 16 main scale divisions. For this vernier callipers, the least count is ",
+    option1: "0.02 mm",
+    option2: "0.03 mm",
+    option3: "0.04 mm",
+    option4: "0.01 mm",
+  },
 };
 
 function Percentage() {
   const [user, setUser] = useState(null);
-  const [PercentagetaskState, setPercentageTaskState] = useState([]);
+  const [percentageTaskState, setPercentageTaskState] = useState([]);
+  const [localbase, setLocalbase] = useState(null);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -72,145 +92,75 @@ function Percentage() {
 
   useEffect(() => {
     if (user) {
+      console.log("effect 1 working");
       const uid = user.uid;
-      const dbRef = firebase.database().ref(`users/${uid}/percentage`);
-      dbRef.on('value', (snapshot) => {
-        const tasksFromDB = snapshot.val();
-        if (tasksFromDB) {
-          // Merge the tasks from the database with the default tasks
-          setPercentageTaskState((prevState) => {
-            const mergedTasks = { ...prevState, ...tasksFromDB };
-            return mergedTasks;
-          });
+      const db = firebase.firestore(); // Get a Firestore instance
+      const docRef = db
+        .collection("users")
+        .doc(uid)
+        .collection("percentage")
+        .doc("tasks");
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+          setPercentageTaskState(doc.data());
         } else {
-          // Use the default tasks if there are no tasks in the database
           setPercentageTaskState(tasks);
-          dbRef.set(tasks);
+          docRef.set(tasks);
         }
       });
-    }else {
-      // Use the default tasks if user is not signed in
-      setPercentageTaskState(tasks);
+      const localbase = new Localbase("percentage"); // Create a Localbase instance
+      setLocalbase(localbase);
+    } else {
+      setPercentageTaskState([]);
     }
   }, [user]);
 
-  const handleSignOut = () => {
-    firebase.auth().signOut();
-  };
-
-  const handleTaskCompleted = (taskKey) => {
-    if (user) {
-      const uid = user.uid;
-      const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
-      const updatedTask = {
-        ...PercentagetaskState[taskKey],
-        completed: true
-      };
-      taskRef.set(updatedTask);
-      setPercentageTaskState({
-        ...PercentagetaskState,
-        [taskKey]: updatedTask
-      });
-    } else {
-      const updatedTask = {
-        ...PercentagetaskState[taskKey],
-        completed: true
-      };
-      const updatedTaskState = {
-        ...PercentagetaskState,
-        [taskKey]: updatedTask
-      };
-      setPercentageTaskState(updatedTaskState);
-      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
+  useEffect(() => {
+    if (localbase) {
+      console.log("effect 3 working");
+      localbase.collection("tasks").set(percentageTaskState);
     }
-  };
+  }, [percentageTaskState, localbase]);
 
-  const handleTaskUnchecked = (taskKey) => {
-    if (user) {
-      const uid = user.uid;
-      const taskRef = firebase.database().ref(`users/${uid}/percentage/${taskKey}`);
-      const updatedTask = {
-        ...PercentagetaskState[taskKey],
-        completed: false
-      };
-      taskRef.set(updatedTask);
-      setPercentageTaskState({
-        ...PercentagetaskState,
-        [taskKey]: updatedTask
-      });
-    } else {
-      const updatedTask = {
-        ...PercentagetaskState[taskKey],
-        completed: false
-      };
-      const updatedTaskState = {
-        ...PercentagetaskState,
-        [taskKey]: updatedTask
-      };
-      setPercentageTaskState(updatedTaskState);
-      localStorage.setItem('tasks', JSON.stringify(updatedTaskState));
-    }
+  const handleCheckboxClick = (event) => {
+    const taskId = event.target.value;
+    setPercentageTaskState((prevState) => {
+      const newState = { ...prevState };
+      newState[taskId].completed = !newState[taskId].completed;
+      return newState;
+    });
   };
-
-  const PercentagetasksCompleted = PercentagetaskState ? Object.values(PercentagetaskState).filter(task => task.completed).length : 0;
-  const PercentagetasksTotal = PercentagetaskState ? Object.keys(PercentagetaskState).length : 0;
 
   return (
     <div>
       {user ? (
         <div>
-          <header>
-          <h1>My Task List</h1>
-          </header>
-          <button onClick={handleSignOut}>Sign Out</button>
-      <main>
-        <p>{PercentagetasksCompleted} out of {PercentagetasksTotal} tasks completed</p>
-        <ul>
-          {Object.entries(PercentagetaskState).map(([taskKey, task]) => (
-            <li key={taskKey}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => task.completed ? handleTaskUnchecked(taskKey) : handleTaskCompleted(taskKey)}
-                />
-                {task.name}
-              </label>
-            </li>
-          ))}
-        </ul>
-      </main>
-      
+          <h1>Percentage Tasks</h1>
+          <ul>
+            {Object.keys(percentageTaskState).map((taskId) => {
+              const task = percentageTaskState[taskId];
+              return (
+                <li key={taskId}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      value={taskId}
+                      checked={task.completed}
+                      onChange={handleCheckboxClick}
+                    />
+                    {task.name}
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : (
+        <SignIn />
+      )}
+      <Toaster />
     </div>
-  ) : (
-    <div>
-    <SignIn />
-    <main>
-        <p>{PercentagetasksCompleted} out of {PercentagetasksTotal} tasks completed</p>
-        <ul>
-          {Object.entries(PercentagetaskState).map(([taskKey, task]) => (
-            <li key={taskKey}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => task.completed ? handleTaskUnchecked(taskKey) : handleTaskCompleted(taskKey)}
-                />
-                {task.name}
-              </label>
-            </li>
-          ))}
-        </ul>
-      </main>
-    </div>
-  )}
-</div>
-);
+  );
 }
 
 export default Percentage;
-
-
-
-
-

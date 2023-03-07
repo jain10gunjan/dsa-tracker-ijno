@@ -1,6 +1,7 @@
 import React from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import GoogleButton from 'react-google-button'
 
 function SignIn() {
   const signInWithGoogle = () => {
@@ -9,7 +10,7 @@ function SignIn() {
   };
 
   return (
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <GoogleButton onClick={signInWithGoogle} style={{justifyContent: 'center'}}/>
   );
 }
 
