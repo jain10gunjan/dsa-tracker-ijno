@@ -10,7 +10,7 @@ function SignIn() {
   };
 
   return (
-    <GoogleButton onClick={signInWithGoogle} style={{justifyContent: 'center'}}/>
+    <GoogleButton onClick={signInWithGoogle} style={{justifyContent: 'center'}} />
   );
 }
 

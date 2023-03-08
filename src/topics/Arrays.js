@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/database';
-import firebaseConfig from './Firebase/firebase.config';
-import Navbar from './components/Navbar';
-import Notifications from './components/Notifications';
+import firebaseConfig from '../Firebase/firebase.config';
+import Navbar from '../components/Navbar';
+import Notifications from '../components/Notifications';
 
 firebase.initializeApp(firebaseConfig);
 
@@ -25,7 +25,7 @@ const tasks = {
 };
 
 
-function Percentage() {
+function Arrays() {
   const [user, setUser] = useState(null);
   const [taskState, setTaskState] = useState([]);
 
@@ -184,18 +184,19 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
       {user ? (
         <div>
           
-          <div class="max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
+          <div class="mx-6 max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
     <p class="p-4 font-bold text-black text-md dark:text-white">
-        My Tasks
+        Arrays
         <span class="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-        <p>{tasksCompleted} out of {tasksTotal} tasks completed</p>
+        <p>{tasksCompleted} out of {tasksTotal} Questions. completed</p>
         </span>
+        
     </p>
       {Object.entries(taskState).map(([taskKey, task]) => (
             
             <div key={taskKey}>
 
-<details className="group">
+{/*<details className="group">*/}
 				<summary className="justify-between items-center cursor-pointer list-none">
         <ul>
         <li class="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800">
@@ -214,9 +215,14 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
                 <span class="mx-2">
                     {i = i+1}
                 </span>
-                <span>
-                {task.name}    <span class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3">Click Here</span>
+                
+                <a href={task.URL}><span>
+                {task.Problem} 
                 </span>
+<span class="mx-4 px-2 py-1  text-xs rounded text-gray-800 bg-green-300">
+    Click Here
+</span>
+</a>
             </div>
             <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path>
 </svg>
@@ -224,15 +230,16 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
         </ul>
     
         </summary>
-        <p className="flex items-center justify-start text-sm mt-3 group-open:animate-fadeIn">
+       {/*<p className="flex items-center justify-start text-sm mt-3 group-open:animate-fadeIn">
 					 SAAS platform is a cloud-based software service that allows users to access
 					and use a variety of tools and functionality.
 				</p>
-        </details>
+        </div></details>*/}
 
 </div>
               ))}
               </div>
+      
     </div>
   ) : (
     <div>
@@ -309,7 +316,7 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
 );
 }
 
-export default Percentage;
+export default Arrays;
 
 
 
