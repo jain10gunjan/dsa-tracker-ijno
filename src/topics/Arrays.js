@@ -184,7 +184,7 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
       {user ? (
         <div>
           
-          <div class="mx-6 max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
+          <div class="mx-8 max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
     <p class="p-4 font-bold text-black text-md dark:text-white">
         Arrays
         <span class="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
@@ -244,7 +244,7 @@ localStorage.setItem('arrays', JSON.stringify(updatedTaskState));
   ) : (
     <div>
       
-    <div class="mx-6 max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
+    <div class="mx-8 max-w-screen-xl mx-auto px-5 bg-white min-h-sceen shadow-lg rounded-2xl dark:bg-gray-700">
     <p class="p-4 font-bold text-black text-md dark:text-white">
         Arrays
         <span class="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
