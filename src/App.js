@@ -5,6 +5,8 @@ import 'firebase/compat/database';
 import firebaseConfig from './Firebase/firebase.config';
 import { Link } from 'react-router-dom'
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Notifications from './components/Notifications';
 
 
 firebase.initializeApp(firebaseConfig);
@@ -30,13 +32,14 @@ function App() {
       <>
       <div>
       <Navbar/>
+      <Notifications/>
     </div>
       </>      
       {user ? (
         <div>
           
       
-          <div class="mx-16 mt-20 mb-4 flex flex-col">
+          <div class="mx-16 mt-10 mb-4 flex flex-col">
 
 <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
   <div class="flex items-start rounded-xl bg-white p-4 shadow-lg">
@@ -241,7 +244,7 @@ function App() {
     
     
     
-<div class="mx-16 mt-20 mb-4 flex flex-col">
+<div class="mx-16 mt-10 mb-4 flex flex-col">
 
   <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
     <div class="flex items-start rounded-xl bg-white p-4 shadow-lg">
@@ -449,7 +452,7 @@ function App() {
 
 
   
-
+<Footer/>
   
 </div>
 );

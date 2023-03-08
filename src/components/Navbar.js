@@ -3,11 +3,13 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { Transition } from "@headlessui/react";
 import { Link } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast';
 
 
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider);
+    toast.success(`you are now Signing In`);
   };
 
   const handleSignOut = () => {
@@ -45,38 +47,38 @@ const [user, setUser] = useState(null);
               </div>
               <div className="hidden md:block">
                 <div className="flex space-x-4 ">
-                  <div
-                    className="text-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                <div
+                    className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Dashboard
+                    About Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Team
+                    Privacy Policy
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Projects
+                    Disclaimer
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Calendar
+                    Contact Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Reports
+                    Sitemap
                   </div>
 
                   <button className=" justify-end text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={handleSignOut}>Sign Out</button>
@@ -144,37 +146,37 @@ const [user, setUser] = useState(null);
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <div
-                    className=" text-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Dashboard
+                    About Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Team
+                    Privacy Policy
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Projects
+                    Disclaimer
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Calendar
+                    Contact Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Reports
+                    Sitemap
                   </div>
                   <button className=" justify-end text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={handleSignOut}>Sign Out</button>
               </div>
@@ -195,39 +197,39 @@ const [user, setUser] = useState(null);
               <Link to="/">IJNO.XYZ</Link>
               </div>
               <div className="hidden md:block">
-                <div className="flex space-x-4 ">
+                <div className="mx-4 flex space-x-4 ">
                   <div
-                    className="text-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Dashboard
+                    About Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Team
+                    Privacy Policy
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Projects
+                    Disclaimer
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Calendar
+                    Contact Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Reports
+                    Sitemap
                   </div>
 
                   <button className=" justify-end text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={signInWithGoogle}>Sign In</button>
@@ -296,37 +298,37 @@ const [user, setUser] = useState(null);
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <div
-                    className=" text-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Dashboard
+                    About Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Team
+                    Privacy Policy
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Projects
+                    Disclaimer
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Calendar
+                    Contact Us
                   </div>
 
                   <div
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Reports
+                    Sitemap
                   </div>
                   <button className=" justify-end text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" onClick={signInWithGoogle}>Sign In</button>
               </div>
@@ -339,7 +341,8 @@ const [user, setUser] = useState(null);
 
       
 
-      
+<Toaster position="top-right"
+  reverseOrder={false}/>      
         </div>
         
   )}
