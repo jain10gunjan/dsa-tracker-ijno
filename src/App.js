@@ -6,7 +6,6 @@ import firebaseConfig from './Firebase/firebase.config';
 import { Link } from 'react-router-dom'
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Notifications from './components/Notifications';
 
 
 firebase.initializeApp(firebaseConfig);
@@ -25,14 +24,13 @@ function App() {
     });
   }, []);
 
-
+console.log(user);
 
   return (
     <div>
       <>
       <div>
       <Navbar/>
-      <Notifications/>
     </div>
       </>      
       {user ? (
