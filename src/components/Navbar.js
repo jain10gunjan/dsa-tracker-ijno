@@ -34,7 +34,9 @@ const [user, setUser] = useState(null);
   }, []);
 
   return (
+    
     <>
+
     {user ? (
         <div>
           
@@ -57,7 +59,8 @@ const [user, setUser] = useState(null);
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Privacy Policy
+                <Link to="/privacypolicy">Privacy Policy</Link>
+                    
                   </div>
 
                   <div
@@ -155,7 +158,7 @@ const [user, setUser] = useState(null);
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Privacy Policy
+                <Link to="/privacypolicy">Privacy Policy</Link>
                   </div>
 
                   <div
@@ -216,7 +219,7 @@ const [user, setUser] = useState(null);
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Privacy Policy
+                <Link to="/privacypolicy">Privacy Policy</Link>
                   </div>
 
                   <div
@@ -315,7 +318,7 @@ const [user, setUser] = useState(null);
                     
                     className="text-gray-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Privacy Policy
+                <Link to="/privacypolicy">Privacy Policy</Link>
                   </div>
 
                   <div
@@ -355,8 +358,7 @@ const [user, setUser] = useState(null);
 
       
 
-<Toaster position="top-right"
-  reverseOrder={false}/>      
+<Toaster/>      
         </div>
         
   )}
